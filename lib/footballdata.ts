@@ -78,3 +78,24 @@ export interface TeamDetail {
 export async function getSquad(): Promise<TeamDetail> {
   return fetchFD<TeamDetail>(`/teams/${ATLETICO_ID}`);
 }
+
+export interface StandingEntry {
+  position: number;
+  team: { id: number; name: string; shortName: string; crest: string };
+  playedGames: number;
+  won: number;
+  draw: number;
+  lost: number;
+  points: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  goalDifference: number;
+}
+
+export async function getStandings(): Promise<StandingEntry[]> {
+  const data = await fetchFD<{ standings: { type: string; table: StandingEntry[] }[] }>(
+    "/competitions/PD/standings"
+  );
+  const total = data.standings.find((s) => s.type === "TOTAL");
+  return total?.table ?? [];
+}

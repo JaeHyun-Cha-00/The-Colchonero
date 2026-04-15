@@ -14,6 +14,7 @@ export default function Footer() {
             <ul className="space-y-1 text-sm text-white/70">
               <li><a href="/news" className="hover:text-white transition-colors">News</a></li>
               <li><a href="/schedule" className="hover:text-white transition-colors">Schedule</a></li>
+              <li><a href="/standings" className="hover:text-white transition-colors">Standings</a></li>
               <li><a href="/players" className="hover:text-white transition-colors">Squad</a></li>
               <li><a href="/history" className="hover:text-white transition-colors">History</a></li>
             </ul>
