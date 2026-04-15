@@ -60,3 +60,21 @@ export async function getRecentResults(): Promise<Match[]> {
   );
   return (data.matches ?? []).reverse(); // most recent first
 }
+
+export interface SquadPlayer {
+  id: number;
+  name: string;
+  position: string;
+  dateOfBirth: string;
+  nationality: string;
+}
+
+export interface TeamDetail {
+  crest: string;
+  coach: { name: string; nationality: string };
+  squad: SquadPlayer[];
+}
+
+export async function getSquad(): Promise<TeamDetail> {
+  return fetchFD<TeamDetail>(`/teams/${ATLETICO_ID}`);
+}
