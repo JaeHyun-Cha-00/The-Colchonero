@@ -1,55 +1,55 @@
 import Image from "next/image";
-import { getSquad, SquadPlayer } from "@/lib/footballdata";
+import { getSquadSports, SportsPlayer } from "@/lib/sportsapipro";
 import PlayerCard from "@/components/PlayerCard";
 
-const GK = ["Goalkeeper"];
-const DF = ["Defence", "Defender", "Centre-Back", "Right-Back", "Left-Back"];
-const MF = ["Midfield", "Midfielder", "Left Midfield", "Right Midfield", "Defensive Midfield", "Central Midfield", "Attacking Midfield"];
+const positionMap: Record<string, string> = {
+  G: "Goalkeeper", GK: "Goalkeeper",
+  D: "Defender", DF: "Defender",
+  M: "Midfielder", MF: "Midfielder",
+  F: "Forward", FW: "Forward",
+};
 
-function groupPlayers(squad: SquadPlayer[]) {
-  const groups: Record<string, SquadPlayer[]> = {
-    Goalkeeper: [],
-    Defender: [],
-    Midfielder: [],
-    Forward: [],
+function groupPlayers(squad: SportsPlayer[]) {
+  const groups: Record<string, SportsPlayer[]> = {
+    Goalkeeper: [], Defender: [], Midfielder: [], Forward: [],
   };
   for (const p of squad) {
-    if (GK.includes(p.position)) groups.Goalkeeper.push(p);
-    else if (DF.includes(p.position)) groups.Defender.push(p);
-    else if (MF.includes(p.position)) groups.Midfielder.push(p);
-    else groups.Forward.push(p);
+    const group = positionMap[p.position] ?? "Forward";
+    groups[group].push(p);
   }
   return groups;
 }
 
 export default async function PlayersPage() {
-  let teamDetail;
+  let squad: SportsPlayer[] = [];
+  let error = false;
   try {
-    teamDetail = await getSquad();
+    squad = await getSquadSports();
   } catch {
-    return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-3xl font-bold mb-4">Squad</h1>
-        <p className="text-muted-foreground">Unable to load squad data. Please try again later.</p>
-      </div>
-    );
+    error = true;
   }
 
-  const { squad, crest, coach } = teamDetail;
   const groups = groupPlayers(squad);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      {/* Header */}
       <div className="flex items-center gap-4 mb-10">
-        <Image src={crest} alt="Atlético Madrid" width={56} height={56} className="object-contain" />
+        <Image
+          src="https://crests.football-data.org/78.png"
+          alt="Atlético Madrid"
+          width={56}
+          height={56}
+          className="object-contain"
+        />
         <div>
           <h1 className="text-3xl font-bold">Squad</h1>
-          <p className="text-muted-foreground">
-            Atlético Madrid 2025-26 · Coach: {coach.name}
-          </p>
+          <p className="text-muted-foreground">Atlético Madrid 2025-26</p>
         </div>
       </div>
+
+      {error && (
+        <p className="text-muted-foreground">Unable to load squad. Please try again later.</p>
+      )}
 
       {Object.entries(groups).map(([group, players]) =>
         players.length === 0 ? null : (
