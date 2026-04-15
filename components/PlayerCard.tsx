@@ -79,9 +79,6 @@ export default function PlayerCard({
               <span>· {getAge(player.dateOfBirth)} yrs</span>
             )}
           </div>
-          {marketValue && (
-            <span className="mt-2 text-xs font-semibold text-primary">{marketValue}</span>
-          )}
         </CardContent>
       </Card>
 
