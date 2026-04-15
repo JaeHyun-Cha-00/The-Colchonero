@@ -14,6 +14,7 @@ function groupPlayers(squad: SportsPlayer[]) {
     Goalkeeper: [], Defender: [], Midfielder: [], Forward: [],
   };
   for (const p of squad) {
+    if (!p.jerseyNumber || p.jerseyNumber > 25) continue;
     const group = positionMap[p.position] ?? "Forward";
     groups[group].push(p);
   }
