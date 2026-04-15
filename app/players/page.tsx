@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { getSquad, SquadPlayer } from "@/lib/footballdata";
 
@@ -89,7 +90,8 @@ export default async function PlayersPage() {
 
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {players.map((player) => (
-                <Card key={player.id} className="hover:shadow-lg transition-shadow group cursor-pointer">
+                <Link key={player.id} href={`/players/${player.id}`}>
+                <Card className="hover:shadow-lg transition-shadow group cursor-pointer">
                   <CardContent className="p-4 flex flex-col items-center text-center">
                     {/* Avatar placeholder */}
                     <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-2xl mb-3 group-hover:bg-primary/20 transition-colors">
@@ -107,6 +109,7 @@ export default async function PlayersPage() {
                     </div>
                   </CardContent>
                 </Card>
+                </Link>
               ))}
             </div>
           </section>

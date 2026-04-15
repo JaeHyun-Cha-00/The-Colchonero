@@ -99,3 +99,33 @@ export async function getStandings(): Promise<StandingEntry[]> {
   const total = data.standings.find((s) => s.type === "TOTAL");
   return total?.table ?? [];
 }
+
+export interface PlayerDetail {
+  id: number;
+  name: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  nationality: string;
+  position: string;
+  shirtNumber: number | null;
+  currentTeam: {
+    name: string;
+    crest: string;
+    venue: string;
+    founded: number;
+    contract: { start: string; until: string } | null;
+    runningCompetitions: { name: string; emblem: string }[];
+  };
+}
+
+export async function getPlayerDetail(id: number): Promise<PlayerDetail> {
+  return fetchFD<PlayerDetail>(`/persons/${id}`);
+}
+
+export async function getPlayerMatches(id: number): Promise<Match[]> {
+  const data = await fetchFD<{ matches: Match[] }>(
+    `/persons/${id}/matches?limit=5&status=FINISHED`
+  );
+  return (data.matches ?? []).reverse();
+}
