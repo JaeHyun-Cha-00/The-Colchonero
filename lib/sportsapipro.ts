@@ -48,7 +48,7 @@ export async function getSquadSports(): Promise<SportsPlayer[]> {
     proposedMarketValue: p.proposedMarketValue as number | null,
     preferredFoot: p.preferredFoot as string,
     country: p.country as { name: string; alpha2: string },
-    imageUrl: `${BASE_URL}/api/players/${p.id}/image`,
+    imageUrl: `/api/player-image/${p.id}`,
   }));
 }
 
